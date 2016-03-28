@@ -58,6 +58,15 @@
                 return this.subscribe(topic, callback, true);
             };
 
+
+            PubSub.subscribeController = function(scope, topic, callback, once) {
+                var token = PubSub.subscribe(topic, callback, once);
+
+                var watch = scope.$on("$destroy", function() {
+                    watch();
+                    PubSub.unsubscribe(token);
+                });
+            };
             /**
              * Publish or broadcast events of interest with a specific
              * topic name and arguments such as the data to pass along.
